@@ -5,17 +5,17 @@ import "./token.sol";
 
 contract RoomToken is ERC20Token{
     string public name;
-    uint256 public amountOfTokens;
+    uint256 public totalTokens;
     mapping(address => uint256) public balances;
     mapping(address => mapping(address => uint256)) public allowances;
 
-    constructor(string memory _name, uint256 _amountOfTokens){
+    constructor(string memory _name, uint256 _totalTokens){
         name = _name;
-        amountOfTokens = _amountOfTokens;
+        totalTokens = _totalTokens;
     }
 
     function totalSupply() public override view returns (uint256){
-        return amountOfTokens;
+        return totalTokens;
     }
     function balanceOf(address account) public override view returns (uint256){
         return balances[account];
@@ -25,7 +25,11 @@ contract RoomToken is ERC20Token{
     }
 
     function transfer(address recipient, uint256 amount) public override returns (bool){
-
+        require(amount <= balances[msg.sender]);
+        balances[msg.sender] = balances[msg.sender] - amount;
+        balances[recipient] = balances[recipient] + amount;
+        emit Transfer(msg.sender, recipient, amount);
+        return true;
     }
     function approve(address spender, uint256 amount) public override returns (bool){
 
