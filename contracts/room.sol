@@ -32,7 +32,10 @@ contract RoomToken is ERC20Token{
         return true;
     }
     function approve(address spender, uint256 amount) public override returns (bool){
-
+        require(amount <= balances[msg.sender]);
+        allowances[msg.sender][spender] = amount;
+        emit Approval(msg.sender, spender, amount);
+        return true;
     }
     function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool){
 
