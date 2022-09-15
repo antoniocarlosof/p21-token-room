@@ -17,7 +17,10 @@ contract Room123 is RoomToken{
         room123.transfer(msg.sender, requestedTokens);
     }
 
-    function sell(uint256 amount) public{
-
+    function sell(uint256 amount, uint256 paymentWei) public{
+        require(amount > 0);
+        require(room123.allowance(msg.sender, address(this)) >= amount);
+        room123.transferFrom(msg.sender, address(this), amount);
+        payable(msg.sender).transfer(paymentWei);
     }
 }
