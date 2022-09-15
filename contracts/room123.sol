@@ -13,4 +13,8 @@ contract Room123 is RoomToken{
     function buy() payable public{
 
     }
+
+    function sell(uint256 amount) public{
+        
+    }
 }
