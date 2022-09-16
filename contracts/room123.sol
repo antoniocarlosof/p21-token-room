@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./room.sol";
 
-contract Room123 is RoomToken{
+contract Room123{
     RoomToken public room123;
 
     constructor(){
