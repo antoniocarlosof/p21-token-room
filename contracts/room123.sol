@@ -30,6 +30,9 @@ contract Room123{
     function offer(uint256 amount, uint256 paymentWei) public{
         require(amount > 0);
         require(room123.allowance(msg.sender, address(this)) >= amount);
+        // require(room123.balanceOf(msg.sender) - *amount in offer* >= amount);
+        // amount in offer requires checking offerList over a mapping, which requires an identifier,
+        // or a loop, which is very expensive. Maaping solution is being developed 
         offerList.push(tokenOffer(msg.sender, amount, paymentWei));
     }
 }
