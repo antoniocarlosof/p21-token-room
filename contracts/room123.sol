@@ -26,10 +26,9 @@ contract Room123{
         room123.transfer(msg.sender, requestedTokens);
     }
 
-    function sell(uint256 amount, uint256 paymentWei) public{
+    function offer(uint256 amount, uint256 paymentWei) public{
         require(amount > 0);
         require(room123.allowance(msg.sender, address(this)) >= amount);
-        room123.transferFrom(msg.sender, address(this), amount);
-        payable(msg.sender).transfer(paymentWei);
+        offerList.push(tokenOffer(msg.sender, amount, paymentWei));
     }
 }
