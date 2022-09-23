@@ -5,9 +5,18 @@ import "./room.sol";
 
 contract Room123{
     RoomToken public room123;
+    
+    struct tokenOffer{
+        address owner;
+        uint256 amountOfTokens;
+        uint256 pricePerToken;
+    }
+
+    tokenOffer[] public offerList;
 
     constructor(){
         room123 = new RoomToken("room123", "R123", 100);
+        offerList.push(tokenOffer(msg.sender, room123.totalSupply(), 5));
     }
 
     function buy() payable public{
