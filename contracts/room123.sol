@@ -19,6 +19,12 @@ contract Room123{
         offerList.push(tokenOffer(address(this), room123.totalSupply(), 5));
     }
 
+    function allowSystem(uint256 amount) public{
+        uint256 newAllowance = room123.allowance(msg.sender, address(this)) + amount;
+        require(room123.balanceOf(msg.sender) >= newAllowance);
+        room123.approve(msg.sender, newAllowance);
+    }
+
     function buy(uint id, uint256 amountToBuy) payable public{
         tokenOffer memory offerToBuy = offerList[id];
         uint256 finalPrice = offerToBuy.pricePerToken * amountToBuy;
