@@ -19,11 +19,12 @@ contract Room123{
         offerList.push(tokenOffer(address(this), room123.totalSupply(), 5));
     }
 
-    function buy() payable public{
-        uint256 requestedTokens = msg.value / 5;
-        require(room123.balanceOf(address(this)) >= requestedTokens);
-        require(requestedTokens > 0);
-        room123.transfer(msg.sender, requestedTokens);
+    function buy(uint id, uint256 amountToBuy) payable public{
+        tokenOffer memory offerToBuy = offerList[id];
+        uint256 finalPrice = offerToBuy.pricePerToken * amountToBuy;
+        require(room123.balanceOf(msg.sender) >= finalPrice);
+        require(amountToBuy > 0);
+        room123.transferFrom(offerToBuy.owner, msg.sender, offerToBuy.amountOfTokens);
     }
 
     function offer(uint256 amount, uint256 paymentWei) public{
