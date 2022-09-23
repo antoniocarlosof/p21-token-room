@@ -16,7 +16,7 @@ contract Room123{
 
     constructor(){
         room123 = new RoomToken("room123", "R123", 100);
-        offerList.push(tokenOffer(msg.sender, room123.totalSupply(), 5));
+        offerList.push(tokenOffer(address(this), room123.totalSupply(), 5));
     }
 
     function buy() payable public{
