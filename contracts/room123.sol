@@ -30,11 +30,11 @@ contract Room123{
     }
 
     function buy(uint id, uint amountToBuy) payable public{
+        require(amountToBuy > 0);
         // Must implement update on offerList after transaction
         tokenOffer memory offerToBuy = offerList[id];
         uint finalPrice = offerToBuy.pricePerToken * amountToBuy;
-        require(room123.balanceOf(msg.sender) >= finalPrice);
-        require(amountToBuy > 0);
+        require(payable(offerToBuy.owner).send(finalPrice));
         room123.transferFrom(offerToBuy.owner, msg.sender, offerToBuy.amountOfTokens);
         amountOffered[offerToBuy.owner] = amountOffered[offerToBuy.owner] - amountToBuy;
     }
