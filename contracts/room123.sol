@@ -8,17 +8,20 @@ contract Room123{
     uint256 tokenCount;
     
     struct tokenOffer{
+        uint id;
         address owner;
         uint256 amountOfTokens;
         uint256 pricePerToken;
     }
 
-    tokenOffer[] public offerList;
+    //tokenOffer[] public offerList;
+    mapping(uint => tokenOffer) public offerList;
 
     constructor(){
         tokenCount = 0;
         room123 = new RoomToken("room123", "R123", 100);
-        offerList.push(tokenOffer(address(this), room123.totalSupply(), 5));
+        //offerList.push(tokenOffer(address(this), room123.totalSupply(), 5));
+        offerList[tokenCount] = tokenOffer(tokenCount,address(this), room123.totalSupply(), 5);
     }
 
     function allowSystem(uint256 amount) public{
@@ -41,6 +44,8 @@ contract Room123{
         // require(room123.balanceOf(msg.sender) - *amount in offer* >= amount);
         // amount in offer requires checking offerList over a mapping, which requires an identifier,
         // or a loop, which is very expensive. Mapping solution is being developed 
-        offerList.push(tokenOffer(msg.sender, amount, paymentWei));
+        tokenCount++;
+        offerList[tokenCount] = tokenOffer(tokenCount, msg.sender, amount, paymentWei);
+        //offerList.push(tokenOffer(msg.sender, amount, paymentWei));
     }
 }
