@@ -39,10 +39,11 @@ contract Room123{
     }
 
     function offer(uint amount, uint256 paymentWei) public{
+        uint totalOfferIntention = amountOffered[msg.sender] + amount;
         require(amount > 0);
         require(room123.allowance(msg.sender, address(this)) >= amount);
-        amountOffered[msg.sender] = amountOffered[msg.sender] + amount;
-        require(room123.balanceOf(msg.sender) >= amountOffered[msg.sender]);
+        require(room123.balanceOf(msg.sender) >= totalOfferIntention);
+        amountOffered[msg.sender] = totalOfferIntention;
         tokenCount++;
         offerList.push(tokenOffer(tokenCount, msg.sender, amount, paymentWei));
     }
