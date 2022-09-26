@@ -14,14 +14,13 @@ contract Room123{
         uint256 pricePerToken;
     }
 
-    //tokenOffer[] public offerList;
-    mapping(uint => tokenOffer) public offerList;
+    tokenOffer[] public offerList;
+    mapping(address => uint) public amountOffered;
 
     constructor(){
         tokenCount = 0;
         room123 = new RoomToken("room123", "R123", 100);
-        //offerList.push(tokenOffer(address(this), room123.totalSupply(), 5));
-        offerList[tokenCount] = tokenOffer(tokenCount,address(this), room123.totalSupply(), 5);
+        offerList.push(tokenOffer(tokenCount, address(this), room123.totalSupply(), 5));
     }
 
     function allowSystem(uint256 amount) public{
@@ -31,6 +30,7 @@ contract Room123{
     }
 
     function buy(uint id, uint256 amountToBuy) payable public{
+        // Must implement update on offerList after transaction
         tokenOffer memory offerToBuy = offerList[id];
         uint256 finalPrice = offerToBuy.pricePerToken * amountToBuy;
         require(room123.balanceOf(msg.sender) >= finalPrice);
@@ -38,14 +38,12 @@ contract Room123{
         room123.transferFrom(offerToBuy.owner, msg.sender, offerToBuy.amountOfTokens);
     }
 
-    function offer(uint256 amount, uint256 paymentWei) public{
+    function offer(uint amount, uint256 paymentWei) public{
         require(amount > 0);
         require(room123.allowance(msg.sender, address(this)) >= amount);
-        // require(room123.balanceOf(msg.sender) - *amount in offer* >= amount);
-        // amount in offer requires checking offerList over a mapping, which requires an identifier,
-        // or a loop, which is very expensive. Mapping solution is being developed 
+        amountOffered[msg.sender] = amountOffered[msg.sender] + amount;
+        require(room123.balanceOf(msg.sender) >= amountOffered[msg.sender]);
         tokenCount++;
-        offerList[tokenCount] = tokenOffer(tokenCount, msg.sender, amount, paymentWei);
-        //offerList.push(tokenOffer(msg.sender, amount, paymentWei));
+        offerList.push(tokenOffer(tokenCount, msg.sender, amount, paymentWei));
     }
 }
