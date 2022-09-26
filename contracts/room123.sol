@@ -5,6 +5,7 @@ import "./room.sol";
 
 contract Room123{
     RoomToken public room123;
+    uint256 tokenCount;
     
     struct tokenOffer{
         address owner;
@@ -15,6 +16,7 @@ contract Room123{
     tokenOffer[] public offerList;
 
     constructor(){
+        tokenCount = 0;
         room123 = new RoomToken("room123", "R123", 100);
         offerList.push(tokenOffer(address(this), room123.totalSupply(), 5));
     }
@@ -38,7 +40,7 @@ contract Room123{
         require(room123.allowance(msg.sender, address(this)) >= amount);
         // require(room123.balanceOf(msg.sender) - *amount in offer* >= amount);
         // amount in offer requires checking offerList over a mapping, which requires an identifier,
-        // or a loop, which is very expensive. Maaping solution is being developed 
+        // or a loop, which is very expensive. Mapping solution is being developed 
         offerList.push(tokenOffer(msg.sender, amount, paymentWei));
     }
 }
