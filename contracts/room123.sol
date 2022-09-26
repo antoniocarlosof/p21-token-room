@@ -29,13 +29,14 @@ contract Room123{
         room123.approve(msg.sender, newAllowance);
     }
 
-    function buy(uint id, uint256 amountToBuy) payable public{
+    function buy(uint id, uint amountToBuy) payable public{
         // Must implement update on offerList after transaction
         tokenOffer memory offerToBuy = offerList[id];
-        uint256 finalPrice = offerToBuy.pricePerToken * amountToBuy;
+        uint finalPrice = offerToBuy.pricePerToken * amountToBuy;
         require(room123.balanceOf(msg.sender) >= finalPrice);
         require(amountToBuy > 0);
         room123.transferFrom(offerToBuy.owner, msg.sender, offerToBuy.amountOfTokens);
+        amountOffered[offerToBuy.owner] = amountOffered[offerToBuy.owner] - amountToBuy;
     }
 
     function offer(uint amount, uint256 paymentWei) public{
