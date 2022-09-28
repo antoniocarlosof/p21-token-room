@@ -6,7 +6,7 @@ import "./token.sol";
 contract RoomToken is ERC20Token{
     string public name;
     string public symbol;
-    address public msgSender;
+    address public admin;
     uint256 public totalTokens;
     mapping(address => uint256) public balances;
     mapping(address => mapping(address => uint256)) public allowances;
@@ -16,7 +16,7 @@ contract RoomToken is ERC20Token{
         symbol = _symbol;
         totalTokens = _totalTokens;
         balances[msg.sender] = _totalTokens;
-        msgSender = msg.sender;
+        admin = msg.sender;
     }
 
     function totalSupply() public override view returns (uint256){
