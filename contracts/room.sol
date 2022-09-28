@@ -47,8 +47,8 @@ contract RoomToken is ERC20Token{
         return true;
     }
     function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool){
-        require(amount <= balances[sender]);
-        require(amount <= allowances[sender][msg.sender]);
+        require(amount <= balances[sender], "Token balance is not enought");
+        require(amount <= allowances[sender][msg.sender], "Caller is not allowed to transfer this amount of tokens");
         
         balances[sender] = balances[sender] - amount;
         balances[recipient] = balances[recipient] + amount;
