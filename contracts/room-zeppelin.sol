@@ -42,6 +42,19 @@ contract Room1412 is ERC20 {
             delete offerList[_offerId];
         }
         amountOffered[offerToBuy.owner] = amountOffered[offerToBuy.owner] - amountToBuy;
+    }
+
+    function offer(uint256 amount, uint256 paymentWei) public {
+        require(amount > 0, "Offered amount of tokens must be greater than 0");
+        require(balanceOf(msg.sender) >= amountOffered[msg.sender] + amount, "Not enough balance. You must not offer more than your current balance");
+
+        offerList[offerCount] = tokenOffer(
+            payable(msg.sender),
+            amount,
+            paymentWei
+        );
+
+        amountOffered[msg.sender] = amountOffered[msg.sender] + amount;
 
         offerCount++;
     }
