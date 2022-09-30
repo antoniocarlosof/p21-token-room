@@ -32,5 +32,7 @@ contract Room1412 is ERC20 {
         tokenOffer memory offerToBuy = offerList[_offerId];
         bool transaction = offerToBuy.owner.send(msg.value);
         require(transaction, "ETH transaction failure");
+
+        _transfer(offerToBuy.owner, msg.sender, amountToBuy);
     }
 }
