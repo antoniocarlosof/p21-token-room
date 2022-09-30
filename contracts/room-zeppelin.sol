@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Room1412 is ERC20 {
     address public admin;
-    uint256 offerCount;
+    uint256 public offerCount;
 
     struct tokenOffer{
         address payable owner;
@@ -22,6 +22,7 @@ contract Room1412 is ERC20 {
         _mint(msg.sender, 100);
         offerList[offerCount] = tokenOffer(payable(msg.sender), totalSupply(), 5000);
         amountOffered[msg.sender] = totalSupply();
+        offerCount++;
         
         admin = msg.sender;
     }
@@ -34,5 +35,14 @@ contract Room1412 is ERC20 {
         require(transaction, "ETH transaction failure");
 
         _transfer(offerToBuy.owner, msg.sender, amountToBuy);
+        if (offerToBuy.amountOfTokens > amountToBuy) {
+            offerToBuy.amountOfTokens = offerToBuy.amountOfTokens - amountToBuy;
+            offerList[_offerId] = offerToBuy;
+        } else {
+            delete offerList[_offerId];
+        }
+        amountOffered[offerToBuy.owner] = amountOffered[offerToBuy.owner] - amountToBuy;
+
+        offerCount++;
     }
 }
